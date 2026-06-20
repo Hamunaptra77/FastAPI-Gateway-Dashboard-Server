@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Request
+from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
@@ -123,7 +124,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
             "error": {
                 "code": "validation_error",
                 "message": "Request validation failed",
-                "details": exc.errors() if settings.app_debug else [],
+                "details": jsonable_encoder(exc.errors()) if settings.app_debug else [],
             }
         },
     )

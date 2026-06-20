@@ -9,6 +9,7 @@ from sqlalchemy.pool import StaticPool
 
 os.environ.setdefault("APP_ENV", "testing")
 os.environ.setdefault("DATABASE_URL", "sqlite://")
+os.environ.setdefault("APP_SECRET_KEY", "testing-secret-key-0123456789abcdef")
 
 from app.db import Base, get_db
 from app.main import app
