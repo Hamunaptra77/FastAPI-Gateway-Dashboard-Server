@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="{{ lang }}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lizenz Benutzer Login</title>
+  <style>
+    :root {
+      --text: #182521;
+      --muted: #62736b;
+      --line: rgba(22, 40, 34, 0.12);
+      --primary: #0f8a6d;
+      --primary-dark: #0c5d4a;
+      --surface: rgba(255, 252, 246, 0.8);
+      --surface-strong: #fffdf8;
+      --danger: #c83d32;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Aptos", "Segoe UI Variable", "Trebuchet MS", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(242, 197, 107, 0.28), transparent 28%),
+        radial-gradient(circle at 82% 18%, rgba(15, 138, 109, 0.18), transparent 24%),
+        linear-gradient(145deg, #fbf7ef 0%, #eef2ee 100%);
+      display: grid;
+      place-items: center;
+      padding: 28px;
+    }
+
+    .login-shell {
+      width: min(1120px, 100%);
+      display: grid;
+      grid-template-columns: minmax(320px, 1fr) minmax(360px, 480px);
+      border-radius: 32px;
+      overflow: hidden;
+      box-shadow: 0 34px 80px rgba(16, 31, 26, 0.16);
+      background: rgba(255, 255, 255, 0.54);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.46);
+    }
+
+    .brand-panel {
+      padding: 42px;
+      background:
+        radial-gradient(circle at 85% 18%, rgba(242, 197, 107, 0.16), transparent 26%),
+        linear-gradient(145deg, #173c35 0%, #0b6451 56%, #0a7f66 100%);
+      color: #f7fbfa;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 26px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.08);
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    .brand-panel h1 {
+      margin: 18px 0 12px;
+      font-size: clamp(2.2rem, 4vw, 3.8rem);
+      line-height: 0.94;
+      letter-spacing: -0.05em;
+      max-width: 9ch;
+    }
+
+    .brand-panel p {
+      margin: 0;
+      max-width: 52ch;
+      color: rgba(247, 251, 250, 0.78);
+      line-height: 1.7;
+      font-size: 1rem;
+    }
+
+    .feature-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .feature {
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .feature strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.96rem;
+    }
+
+    .feature span {
+      color: rgba(247, 251, 250, 0.7);
+      font-size: 0.9rem;
+      line-height: 1.55;
+    }
+
+    .login-panel {
+      background: var(--surface);
+      padding: 42px 34px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .login-card {
+      background: var(--surface-strong);
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      padding: 28px;
+      box-shadow: 0 18px 40px rgba(18, 31, 27, 0.08);
+    }
+
+    .login-card h2 {
+      margin: 0;
+      font-size: 2rem;
+      letter-spacing: -0.05em;
+    }
+
+    .lead {
+      color: var(--muted);
+      line-height: 1.65;
+      margin: 10px 0 0;
+    }
+
+    .lang {
+      display: flex;
+      gap: 10px;
+      margin: 20px 0 14px;
+      flex-wrap: wrap;
+    }
+
+    .lang a {
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.78);
+      color: var(--muted);
+      font-weight: 800;
+      font-size: 0.88rem;
+      text-decoration: none;
+    }
+
+    .field {
+      margin-top: 16px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 0.84rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    input {
+      width: 100%;
+      min-height: 56px;
+      padding: 16px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.92);
+      font: inherit;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+    }
+
+    input:focus {
+      border-color: rgba(15, 138, 109, 0.46);
+      box-shadow: 0 0 0 4px rgba(15, 138, 109, 0.11);
+      transform: translateY(-1px);
+    }
+
+    button {
+      width: 100%;
+      min-height: 56px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      color: #fff;
+      font: inherit;
+      font-weight: 800;
+      box-shadow: 0 16px 34px rgba(15, 138, 109, 0.2);
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 22px 42px rgba(15, 138, 109, 0.26);
+    }
+
+    .error {
+      min-height: 22px;
+      margin: 12px 0 0;
+      color: var(--danger);
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    @media (max-width: 920px) {
+      .login-shell {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 16px;
+      }
+
+      .brand-panel,
+      .login-panel {
+        padding: 24px;
+      }
+
+      .login-card {
+        padding: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-shell">
+    <section class="brand-panel">
+      <div>
+        <div class="eyebrow">License Center</div>
+        <h1>{{ app_name }}</h1>
+        <p>Sicherer Zugang fuer bestehende Lizenzinhaber zum Verlängern, Prüfen und Verwalten ihrer Lizenz.</p>
+      </div>
+
+      <div class="feature-list">
+        <div class="feature">
+          <strong>Lizenzstatus sofort sichtbar</strong>
+          <span>Ablaufdatum, aktueller Plan und Aktivstatus werden im Dashboard transparent dargestellt.</span>
+        </div>
+        <div class="feature">
+          <strong>Verlaengerung mit PayPal</strong>
+          <span>Plan wählen, Zahlung abschließen und Laufzeit direkt übernehmen.</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="login-panel">
+      <form class="login-card" method="post" action="/license/login">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <h2>Einloggen</h2>
+        <p class="lead">Bitte melde dich mit E-Mail und Lizenzschluessel an.</p>
+        <p class="lang">
+          {% for l in supported_languages %}
+            <a href="/license/login?lang={{ l }}">{{ l.upper() }}</a>
+          {% endfor %}
+        </p>
+
+        <div class="field">
+          <label for="email">E-Mail</label>
+          <input id="email" name="email" type="email" required />
+        </div>
+
+        <div class="field">
+          <label for="license_key">Lizenzschluessel</label>
+          <input id="license_key" name="license_key" required />
+        </div>
+
+        <button type="submit">Einloggen</button>
+        <p class="error">{{ error }}</p>
+      </form>
+    </section>
+  </div>
+</body>
+</html>

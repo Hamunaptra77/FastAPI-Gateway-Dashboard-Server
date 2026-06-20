@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="{{ lang }}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ app_name }}</title>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Space+Grotesk:wght@600;700&display=swap");
+
+    :root {
+      --bg-0: #081318;
+      --bg-1: #0d212b;
+      --bg-2: #123645;
+      --panel: rgba(255, 255, 255, 0.08);
+      --line: rgba(255, 255, 255, 0.2);
+      --text: #eef8fb;
+      --muted: #a8c4cd;
+      --accent: #ffb23f;
+      --primary: #18b59e;
+      --danger: #ff6473;
+      --shadow: 0 20px 45px rgba(0, 0, 0, 0.28);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Manrope", "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% 10%, #1f5568 0%, transparent 38%),
+        radial-gradient(circle at 84% 18%, #5f3f1f 0%, transparent 34%),
+        linear-gradient(135deg, var(--bg-0), var(--bg-1) 45%, var(--bg-2));
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image: linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 36px 36px;
+      pointer-events: none;
+      opacity: 0.22;
+      z-index: -1;
+    }
+
+    .container {
+      width: min(1240px, 94vw);
+      margin: 0 auto;
+      padding: 24px 0 40px;
+    }
+
+    .hero {
+      border: 1px solid var(--line);
+      background: linear-gradient(135deg, rgba(20, 84, 99, 0.68), rgba(18, 39, 54, 0.86));
+      border-radius: 24px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(6px);
+      display: grid;
+      gap: 14px;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: "Space Grotesk", "Manrope", sans-serif;
+      letter-spacing: 0.2px;
+      font-size: clamp(1.6rem, 3vw, 2.35rem);
+    }
+
+    h2 {
+      margin: 0 0 7px;
+      font-family: "Space Grotesk", "Manrope", sans-serif;
+      font-size: 1.3rem;
+    }
+
+    .badge {
+      width: fit-content;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #ffcf72, #ffb23f);
+      color: #2e2000;
+      padding: 6px 12px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.45px;
+    }
+
+    .top-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .top-links a {
+      text-decoration: none;
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      transition: transform 0.2s ease, background-color 0.2s ease;
+    }
+
+    .top-links a:hover {
+      transform: translateY(-1px);
+      background: rgba(255, 255, 255, 0.16);
+    }
+
+    .lang-switch {
+      display: inline-flex;
+      gap: 8px;
+    }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      text-decoration: none;
+      border-radius: 12px;
+      padding: 10px 15px;
+      font-weight: 800;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .cta-btn:hover { transform: translateY(-1px); }
+
+    .cta-btn-primary {
+      color: #0e2e38;
+      background: linear-gradient(120deg, #b9fff3, #74f5df);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.22);
+    }
+
+    .cta-btn-secondary {
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      background: rgba(255, 255, 255, 0.07);
+    }
+
+    .hero-note {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: minmax(280px, 420px) 1fr;
+      align-items: start;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 18px;
+      background: var(--panel);
+      backdrop-filter: blur(6px);
+      box-shadow: var(--shadow);
+    }
+
+    .muted {
+      color: var(--muted);
+      margin: 0 0 10px;
+    }
+
+    label {
+      display: block;
+      margin: 11px 0 6px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #d5ebf1;
+      text-transform: uppercase;
+      letter-spacing: 0.45px;
+    }
+
+    input,
+    select {
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 12px;
+      padding: 11px;
+      background: rgba(9, 26, 34, 0.56);
+      color: #ecf9fb;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: #74f5df;
+      box-shadow: 0 0 0 3px rgba(116, 245, 223, 0.2);
+    }
+
+    button {
+      margin-top: 12px;
+      border: none;
+      border-radius: 12px;
+      padding: 11px 14px;
+      cursor: pointer;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+      width: 100%;
+      background: linear-gradient(120deg, #17c5ab, #0d9989);
+      color: #05231f;
+      transition: transform 0.2s ease;
+    }
+
+    button:hover { transform: translateY(-1px); }
+
+    #trial-btn {
+      background: linear-gradient(120deg, #ffc56a, #f6a941);
+      color: #3a2600;
+    }
+
+    .error {
+      color: var(--danger);
+      min-height: 20px;
+      margin: 10px 0 0;
+      font-weight: 700;
+    }
+
+    #trial-result {
+      margin: 8px 0 0;
+      color: #b8ffe7;
+      font-weight: 600;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      margin-top: 4px;
+    }
+
+    th,
+    td {
+      text-align: left;
+      padding: 10px 0;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.14);
+      vertical-align: top;
+    }
+
+    th {
+      color: #b5dbe4;
+      font-size: 0.82rem;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+    }
+
+    .status {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      background: rgba(24, 181, 158, 0.22);
+      color: #7af6df;
+      border: 1px solid rgba(122, 246, 223, 0.3);
+    }
+
+    .wide { grid-column: 1 / -1; }
+
+    @media (max-width: 980px) {
+      .grid { grid-template-columns: 1fr; }
+      .card { padding: 15px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section class="hero">
+      <h1>{{ app_name }}</h1>
+      <p>{{ t("tagline") }}</p>
+      <span class="badge">{{ t("plans_badge") }}</span>
+      <div class="top-links">
+        <a href="/admin/login">{{ t("admin_login_link") }}</a>
+        <a href="/license/login">Lizenz-Bereich</a>
+        <span class="lang-switch">
+          {% for l in supported_languages %}
+            <a href="/?lang={{ l }}">{{ l.upper() }}</a>
+          {% endfor %}
+        </span>
+      </div>
+      <div class="cta-row">
+        <a class="cta-btn cta-btn-primary" href="#buy-form">{{ t("buy_now_cta") }}</a>
+        <a class="cta-btn cta-btn-secondary" href="#buy-form">{{ t("start_checkout_cta") }}</a>
+        <p class="hero-note">{{ t("public_purchase_note") }}</p>
+      </div>
+    </section>
+
+    <div class="grid">
+      <section class="card">
+        <h2>{{ t("buy_license") }}</h2>
+        <p class="muted">{{ t("buy_license_hint") }}</p>
+
+        <form id="buy-form">
+          <label for="full_name">{{ t("name") }}</label>
+          <input id="full_name" name="full_name" required />
+
+          <label for="email">{{ t("email") }}</label>
+          <input id="email" name="email" type="email" required />
+
+          <label for="plan_code">{{ t("plan") }}</label>
+          <select id="plan_code" name="plan_code" required>
+            {% for plan in plans %}
+              {% if plan.code != "trial5" %}
+                <option value="{{ plan.code }}">{{ plan.name }} - {{ '%.2f'|format(plan.price_eur) }} EUR</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+
+          <button type="submit">{{ t("pay_with_paypal") }}</button>
+          <button type="button" id="trial-btn">{{ t("start_trial") }}</button>
+          <p id="form-error" class="error"></p>
+          <p id="trial-result" class="muted"></p>
+        </form>
+      </section>
+
+      {% if is_admin %}
+        <section class="card">
+          <h2>{{ t("recent_payments") }}</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>{{ t("order_id") }}</th>
+                <th>{{ t("plan") }}</th>
+                <th>{{ t("status") }}</th>
+                <th>{{ t("amount") }}</th>
+                <th>{{ t("email_delivery") }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for p in payments %}
+                <tr>
+                  <td>{{ p.paypal_order_id }}</td>
+                  <td>{{ p.plan_code }}</td>
+                  <td><span class="status">{{ p.status }}</span></td>
+                  <td>{{ '%.2f'|format(p.amount) }} {{ p.currency }}</td>
+                  <td>{{ t("sent") if p.email_sent else t("pending") }}</td>
+                </tr>
+              {% else %}
+                <tr>
+                  <td colspan="5" class="muted">{{ t("no_payments") }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </section>
+
+        <section class="card wide">
+          <h2>{{ t("issued_licenses") }}</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>{{ t("license_key") }}</th>
+                <th>{{ t("plan") }}</th>
+                <th>{{ t("email") }}</th>
+                <th>{{ t("expires_at") }}</th>
+                <th>{{ t("active") }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for l in licenses %}
+                <tr>
+                  <td>{{ l.key }}</td>
+                  <td>{{ l.plan_code }}</td>
+                  <td>{{ l.customer.email }}</td>
+                  <td>{{ l.expires_at if l.expires_at else t("lifetime") }}</td>
+                  <td>{{ t("yes") if l.is_active else t("no") }}</td>
+                </tr>
+              {% else %}
+                <tr>
+                  <td colspan="5" class="muted">{{ t("no_licenses") }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </section>
+      {% endif %}
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('buy-form');
+    const formError = document.getElementById('form-error');
+    const trialBtn = document.getElementById('trial-btn');
+    const trialResult = document.getElementById('trial-result');
+    const trialCreatedText = {{ t("trial_created")|tojson }};
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      formError.textContent = '';
+
+      const fullName = document.getElementById('full_name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const planCode = document.getElementById('plan_code').value;
+
+      const response = await fetch('/api/payments/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ full_name: fullName, email, plan_code: planCode })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        formError.textContent = errorData.detail || {{ t("checkout_create_failed")|tojson }};
+        return;
+      }
+
+      const data = await response.json();
+      window.location.href = data.approve_url;
+    });
+
+    trialBtn.addEventListener('click', async () => {
+      formError.textContent = '';
+      trialResult.textContent = '';
+
+      const fullName = document.getElementById('full_name').value.trim();
+      const email = document.getElementById('email').value.trim();
+
+      const response = await fetch('/api/payments/trial', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ full_name: fullName, email })
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        formError.textContent = data.detail || {{ t("trial_failed")|tojson }};
+        return;
+      }
+
+      trialResult.textContent = `${trialCreatedText} ${data.license_key} (${data.expires_at})`;
+    });
+  </script>
+</body>
+</html>

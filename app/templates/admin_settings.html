@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="{{ lang }}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ t("settings_title") }}</title>
+  <style>
+    :root {
+      --bg: #f2f4f8;
+      --card: #ffffff;
+      --line: #dbe3ef;
+      --text: #1a2433;
+      --muted: #5f6f86;
+      --primary: #0f8a6d;
+      --primary-dark: #0b6b54;
+      --ok: #0b6e4f;
+      --error: #c1121f;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Aptos", "Segoe UI Variable", "Trebuchet MS", sans-serif;
+      font-size: {{ ui_settings.font_scale }}%;
+      background: linear-gradient(145deg, #edf3fa, #f8f8ef);
+      color: var(--text);
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+    }
+
+    body[data-theme="ocean"] {
+      --primary: #1f7ea6;
+      --primary-dark: #145f7f;
+    }
+
+    body[data-theme="sunset"] {
+      --primary: #b95b34;
+      --primary-dark: #944427;
+    }
+
+    body[data-theme="forest"] {
+      --primary: #2a8f57;
+      --primary-dark: #1d6f42;
+    }
+
+    body[data-theme="mono"] {
+      --primary: #3f3f3f;
+      --primary-dark: #232323;
+    }
+
+    .card {
+      width: min(720px, 96vw);
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 18px 42px rgba(21, 33, 55, 0.1);
+    }
+
+    .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+    }
+
+    .back {
+      text-decoration: none;
+      color: #fff;
+      background: #00509d;
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-weight: 700;
+    }
+
+    .intro {
+      margin: 0 0 14px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .lang a {
+      color: #00509d;
+      margin-right: 8px;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .grid {
+      display: grid;
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    input,
+    select {
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid #cfd9e8;
+      border-radius: 10px;
+      padding: 10px;
+      font: inherit;
+      background: #fff;
+    }
+
+    textarea {
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid #cfd9e8;
+      border-radius: 10px;
+      padding: 10px;
+      font: inherit;
+      background: #fff;
+      resize: vertical;
+      min-height: 88px;
+    }
+
+    button {
+      margin-top: 16px;
+      width: 100%;
+      border: none;
+      border-radius: 10px;
+      padding: 12px;
+      background: var(--primary);
+      color: #fff;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: var(--primary-dark);
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .button-row button {
+      margin-top: 0;
+      flex: 1 1 220px;
+    }
+
+    .btn-secondary {
+      background: #dde6f2;
+      color: #18324e;
+    }
+
+    .btn-secondary:hover {
+      background: #cad7e8;
+    }
+
+    .success {
+      color: var(--ok);
+      min-height: 20px;
+      margin-top: 10px;
+    }
+
+    .error {
+      color: var(--error);
+      min-height: 20px;
+      margin-top: 10px;
+    }
+
+    .hint {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .preview {
+      margin-top: 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fbfcff;
+      padding: 14px;
+    }
+
+    .preview h2 {
+      margin: 0;
+      font-size: 1.05rem;
+    }
+
+    .preview p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .preview-surface {
+      margin-top: 12px;
+      border-radius: 12px;
+      border: 1px solid #d5deea;
+      background: #fff;
+      padding: 14px;
+    }
+
+    .preview-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: linear-gradient(140deg, #173c35 0%, #0e5d4d 56%, #0a7f66 100%);
+      color: #fff;
+      font-weight: 800;
+    }
+
+    .preview-header[data-theme="ocean"] {
+      background: linear-gradient(140deg, #18445c 0%, #1f7ea6 60%, #53a9cc 100%);
+    }
+
+    .preview-header[data-theme="sunset"] {
+      background: linear-gradient(140deg, #5a2f22 0%, #b95b34 60%, #e39a5a 100%);
+    }
+
+    .preview-header[data-theme="forest"] {
+      background: linear-gradient(140deg, #23432c 0%, #2a8f57 60%, #63b97a 100%);
+    }
+
+    .preview-header[data-theme="mono"] {
+      background: linear-gradient(140deg, #232323 0%, #3f3f3f 60%, #747474 100%);
+    }
+
+    .preview-chip {
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 0.8rem;
+      background: rgba(255, 255, 255, 0.18);
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body data-theme="{{ ui_settings.theme }}">
+  <form class="card" method="post" action="/admin/settings">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+    <div class="top">
+      <h1>{{ t("settings_title") }}</h1>
+      <a class="back" href="/admin">{{ t("back") }}</a>
+    </div>
+
+    <p class="intro">{{ t("settings_intro") }}</p>
+    <p>{{ t("logged_in_as").format(username=admin.username, role=admin.role) }}</p>
+
+    <p class="lang">
+      {% for l in supported_languages %}
+        <a href="/admin/settings?lang={{ l }}">{{ l.upper() }}</a>
+      {% endfor %}
+    </p>
+
+    <div class="grid">
+      <div>
+        <label for="theme">{{ t("design_theme") }}</label>
+        <select id="theme" name="theme">
+          <option value="default" {% if ui_settings.theme == "default" %}selected{% endif %}>{{ t("theme_default") }}</option>
+          <option value="ocean" {% if ui_settings.theme == "ocean" %}selected{% endif %}>{{ t("theme_ocean") }}</option>
+          <option value="sunset" {% if ui_settings.theme == "sunset" %}selected{% endif %}>{{ t("theme_sunset") }}</option>
+          <option value="forest" {% if ui_settings.theme == "forest" %}selected{% endif %}>{{ t("theme_forest") }}</option>
+          <option value="mono" {% if ui_settings.theme == "mono" %}selected{% endif %}>{{ t("theme_mono") }}</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="font_scale">{{ t("font_size") }}</label>
+        <select id="font_scale" name="font_scale">
+          <option value="90" {% if ui_settings.font_scale == 90 %}selected{% endif %}>{{ t("font_scale_90") }}</option>
+          <option value="100" {% if ui_settings.font_scale == 100 %}selected{% endif %}>{{ t("font_scale_100") }}</option>
+          <option value="110" {% if ui_settings.font_scale == 110 %}selected{% endif %}>{{ t("font_scale_110") }}</option>
+          <option value="120" {% if ui_settings.font_scale == 120 %}selected{% endif %}>{{ t("font_scale_120") }}</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="header_name">{{ t("header_name") }}</label>
+        <input
+          id="header_name"
+          name="header_name"
+          type="text"
+          maxlength="60"
+          value="{{ ui_settings.header_name }}"
+          placeholder="{{ t('header_name_placeholder') }}"
+        />
+      </div>
+
+      <div>
+        <label for="control_center_title">{{ t("control_center_title") }}</label>
+        <input
+          id="control_center_title"
+          name="control_center_title"
+          type="text"
+          maxlength="60"
+          value="{{ control_center_content.raw_title }}"
+          placeholder="{{ t('control_center_title_placeholder') }}"
+        />
+      </div>
+
+      <div>
+        <label for="control_center_headline">{{ t("control_center_headline") }}</label>
+        <textarea
+          id="control_center_headline"
+          name="control_center_headline"
+          maxlength="180"
+          placeholder="{{ t('control_center_headline_placeholder') }}"
+        >{{ control_center_content.raw_headline }}</textarea>
+      </div>
+
+      <div>
+        <label for="control_center_description">{{ t("control_center_description") }}</label>
+        <textarea
+          id="control_center_description"
+          name="control_center_description"
+          maxlength="500"
+          placeholder="{{ t('control_center_description_placeholder') }}"
+        >{{ control_center_content.raw_description }}</textarea>
+      </div>
+    </div>
+
+    <section class="preview" aria-live="polite">
+      <h2>{{ t("settings_preview") }}</h2>
+      <p>{{ t("settings_preview_text") }}</p>
+      <div class="preview-surface" id="preview_surface">
+        <div class="preview-header" id="preview_header" data-theme="{{ ui_settings.theme }}">
+          <span id="preview_title">{{ ui_settings.header_name if ui_settings.header_name else app_name }}</span>
+          <span class="preview-chip">{{ t("admin_dashboard_title") }}</span>
+        </div>
+        <p><strong id="preview_cc_title">{{ control_center_content.title }}</strong></p>
+        <p id="preview_cc_headline" style="white-space: pre-line; font-weight: 700; color: #24364f;">{{ control_center_content.headline }}</p>
+        <p id="preview_cc_description" style="white-space: pre-line;">{{ control_center_content.description }}</p>
+        <p>{{ t("logged_in_as").format(username=admin.username, role=admin.role) }}</p>
+      </div>
+    </section>
+
+    <div class="button-row">
+      <button type="submit">{{ t("save_settings") }}</button>
+      <button class="btn-secondary" type="submit" formaction="/admin/settings/reset" formmethod="post">{{ t("reset_settings") }}</button>
+    </div>
+    <p class="error">{{ error }}</p>
+    <p class="success">{{ success }}</p>
+
+    <p class="hint">Diese Einstellungen wirken auf dein Admin-Dashboard und koennen jederzeit wieder geaendert werden.</p>
+  </form>
+  <script>
+    const themeEl = document.getElementById("theme");
+    const fontScaleEl = document.getElementById("font_scale");
+    const headerNameEl = document.getElementById("header_name");
+    const controlCenterTitleEl = document.getElementById("control_center_title");
+    const controlCenterHeadlineEl = document.getElementById("control_center_headline");
+    const controlCenterDescriptionEl = document.getElementById("control_center_description");
+    const previewHeaderEl = document.getElementById("preview_header");
+    const previewTitleEl = document.getElementById("preview_title");
+    const previewCcTitleEl = document.getElementById("preview_cc_title");
+    const previewCcHeadlineEl = document.getElementById("preview_cc_headline");
+    const previewCcDescriptionEl = document.getElementById("preview_cc_description");
+    const fallbackHeader = {{ app_name | tojson }};
+    const fallbackControlCenterTitle = {{ t("control_center_default_title") | tojson }};
+    const fallbackControlCenterHeadline = {{ t("control_center_default_headline") | tojson }};
+    const fallbackControlCenterDescription = {{ t("control_center_default_description") | tojson }};
+
+    function applyPreview() {
+      const theme = themeEl.value || "default";
+      const fontScale = Number(fontScaleEl.value || "100");
+      const headerName = headerNameEl.value.trim();
+      const controlCenterTitle = controlCenterTitleEl.value.trim();
+      const controlCenterHeadline = controlCenterHeadlineEl.value.trim();
+      const controlCenterDescription = controlCenterDescriptionEl.value.trim();
+
+      document.body.dataset.theme = theme;
+      document.body.style.fontSize = `${fontScale}%`;
+      previewHeaderEl.dataset.theme = theme;
+      previewTitleEl.textContent = headerName || fallbackHeader;
+      previewCcTitleEl.textContent = controlCenterTitle || fallbackControlCenterTitle;
+      previewCcHeadlineEl.textContent = controlCenterHeadline || fallbackControlCenterHeadline;
+      previewCcDescriptionEl.textContent = controlCenterDescription || fallbackControlCenterDescription;
+    }
+
+    themeEl.addEventListener("change", applyPreview);
+    fontScaleEl.addEventListener("change", applyPreview);
+    headerNameEl.addEventListener("input", applyPreview);
+    controlCenterTitleEl.addEventListener("input", applyPreview);
+    controlCenterHeadlineEl.addEventListener("input", applyPreview);
+    controlCenterDescriptionEl.addEventListener("input", applyPreview);
+    applyPreview();
+  </script>
+</body>
+</html>

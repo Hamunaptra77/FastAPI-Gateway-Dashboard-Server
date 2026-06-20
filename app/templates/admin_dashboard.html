@@ -1,0 +1,846 @@
+<!doctype html>
+<html lang="{{ lang }}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard</title>
+  <style>
+    :root {
+      --bg: #f3f1ea;
+      --surface: rgba(255, 253, 248, 0.82);
+      --surface-strong: #fffdf8;
+      --surface-deep: #143530;
+      --text: #182521;
+      --muted: #63736b;
+      --line: rgba(20, 38, 33, 0.1);
+      --primary: #0f8a6d;
+      --primary-dark: #0c5d4a;
+      --danger: #c83d32;
+      --warning: #f2c56b;
+      --success-soft: #edf8f3;
+      --error-soft: #fff2f1;
+      --shadow: 0 24px 60px rgba(17, 31, 26, 0.1);
+      --radius-xl: 30px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Aptos", "Segoe UI Variable", "Trebuchet MS", sans-serif;
+      font-size: {{ ui_settings.font_scale }}%;
+      background:
+        radial-gradient(circle at top left, rgba(242, 197, 107, 0.28), transparent 24%),
+        radial-gradient(circle at 82% 18%, rgba(15, 138, 109, 0.15), transparent 22%),
+        linear-gradient(180deg, #fbf8f0 0%, var(--bg) 50%, #eef2ef 100%);
+      color: var(--text);
+    }
+
+    body[data-theme="ocean"] {
+      --bg: #e7f1f8;
+      --surface: rgba(247, 252, 255, 0.84);
+      --surface-strong: #f7fcff;
+      --surface-deep: #12394e;
+      --text: #152b37;
+      --muted: #5d7685;
+      --line: rgba(18, 57, 78, 0.12);
+      --primary: #1f7ea6;
+      --primary-dark: #145f7f;
+      --danger: #c94440;
+      --warning: #f2c56b;
+      --success-soft: #ecf7fd;
+      --error-soft: #fff2f1;
+    }
+
+    body[data-theme="sunset"] {
+      --bg: #f8ece4;
+      --surface: rgba(255, 249, 245, 0.84);
+      --surface-strong: #fff9f5;
+      --surface-deep: #4a2e25;
+      --text: #2f211b;
+      --muted: #7f6357;
+      --line: rgba(74, 46, 37, 0.12);
+      --primary: #b95b34;
+      --primary-dark: #944427;
+      --danger: #c64034;
+      --warning: #efba6d;
+      --success-soft: #fdf2eb;
+      --error-soft: #fff1ef;
+    }
+
+    body[data-theme="forest"] {
+      --bg: #e9f1e9;
+      --surface: rgba(248, 253, 248, 0.84);
+      --surface-strong: #f8fdf8;
+      --surface-deep: #21402a;
+      --text: #173021;
+      --muted: #587060;
+      --line: rgba(33, 64, 42, 0.12);
+      --primary: #2a8f57;
+      --primary-dark: #1d6f42;
+      --danger: #bd4439;
+      --warning: #e6c56c;
+      --success-soft: #ebf8ee;
+      --error-soft: #fff2f1;
+    }
+
+    body[data-theme="mono"] {
+      --bg: #f0f0f0;
+      --surface: rgba(255, 255, 255, 0.86);
+      --surface-strong: #ffffff;
+      --surface-deep: #2f2f2f;
+      --text: #1f1f1f;
+      --muted: #676767;
+      --line: rgba(47, 47, 47, 0.12);
+      --primary: #3f3f3f;
+      --primary-dark: #232323;
+      --danger: #b13f3f;
+      --warning: #d6b85b;
+      --success-soft: #f2f2f2;
+      --error-soft: #fff2f1;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .shell {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 28px 24px 64px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(340px, 0.8fr);
+      gap: 26px;
+      margin-bottom: 24px;
+      padding: 28px;
+      border-radius: var(--radius-xl);
+      background:
+        radial-gradient(circle at 88% 16%, rgba(242, 197, 107, 0.16), transparent 24%),
+        linear-gradient(145deg, #173c35 0%, #0e5d4d 56%, #0a7f66 100%);
+      color: #f7fbfa;
+      box-shadow: 0 34px 74px rgba(16, 48, 40, 0.26);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.12), transparent 70%);
+      right: -120px;
+      bottom: -140px;
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(255, 255, 255, 0.08);
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(247, 251, 250, 0.78);
+    }
+
+    .hero h1 {
+      margin: 18px 0 10px;
+      font-size: clamp(2.3rem, 4.8vw, 4.2rem);
+      line-height: 0.94;
+      letter-spacing: -0.05em;
+      max-width: 11ch;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 62ch;
+      color: rgba(247, 251, 250, 0.8);
+      line-height: 1.7;
+    }
+
+    .hero-tools,
+    .lang-switch,
+    .stat-grid,
+    .card-grid,
+    .button-row,
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .hero-tools,
+    .lang-switch,
+    .stat-grid {
+      margin-top: 18px;
+    }
+
+    .tool-button,
+    .lang-pill,
+    .pill,
+    .btn-primary,
+    .btn-danger,
+    .btn-secondary {
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+      font: inherit;
+    }
+
+    .tool-button,
+    .lang-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 16px;
+      border-radius: 16px;
+      font-weight: 800;
+    }
+
+    .tool-button {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: #fff;
+    }
+
+    .tool-button.strong {
+      background: #fff9ea;
+      color: #1a372f;
+      box-shadow: 0 16px 30px rgba(16, 31, 26, 0.18);
+    }
+
+    .lang-pill {
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(255, 255, 255, 0.06);
+      color: rgba(255, 255, 255, 0.8);
+      min-height: 42px;
+      padding-inline: 14px;
+    }
+
+    .tool-button:hover,
+    .lang-pill:hover,
+    .btn-primary:hover,
+    .btn-danger:hover,
+    .btn-secondary:hover {
+      transform: translateY(-1px);
+    }
+
+    .hero-side {
+      position: relative;
+      z-index: 1;
+      padding: 22px;
+      border-radius: 24px;
+      background: rgba(8, 20, 17, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(16px);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .side-title {
+      margin: 0;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(247, 251, 250, 0.7);
+    }
+
+    .side-highlight {
+      margin: 0;
+      font-size: 2rem;
+      line-height: 0.95;
+      letter-spacing: -0.05em;
+      font-weight: 900;
+      white-space: pre-line;
+    }
+
+    .side-copy {
+      color: rgba(247, 251, 250, 0.76);
+      line-height: 1.65;
+      white-space: pre-line;
+    }
+
+    .stat-grid {
+      gap: 14px;
+    }
+
+    .stat-card {
+      flex: 1 1 160px;
+      min-width: 0;
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .stat-card strong {
+      display: block;
+      font-size: 1.8rem;
+      margin-bottom: 6px;
+      letter-spacing: -0.05em;
+    }
+
+    .stat-card span {
+      display: block;
+      color: rgba(247, 251, 250, 0.72);
+      font-size: 0.88rem;
+      line-height: 1.55;
+    }
+
+    .layout {
+      display: grid;
+      gap: 24px;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+      overflow: hidden;
+    }
+
+    .panel-body {
+      padding: 24px;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .section-kicker {
+      margin: 0 0 8px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--primary-dark);
+    }
+
+    h2,
+    h3 {
+      margin: 0;
+      letter-spacing: -0.04em;
+    }
+
+    h2 {
+      font-size: clamp(1.9rem, 2.6vw, 2.6rem);
+    }
+
+    h3 {
+      font-size: 1.28rem;
+    }
+
+    .muted { color: var(--muted); line-height: 1.65; }
+    .readonly { opacity: 0.62; font-weight: 700; }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      align-items: end;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    input,
+    select {
+      width: 100%;
+      min-height: 54px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.9);
+      font: inherit;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: rgba(15, 138, 109, 0.48);
+      box-shadow: 0 0 0 4px rgba(15, 138, 109, 0.1);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary,
+    .btn-danger,
+    .btn-secondary {
+      border: none;
+      cursor: pointer;
+      border-radius: 14px;
+      min-height: 50px;
+      padding: 0 16px;
+      font-weight: 800;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      color: #fff;
+      box-shadow: 0 16px 30px rgba(15, 138, 109, 0.18);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.14);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, #b4281e, var(--danger));
+      color: #fff;
+    }
+
+    .feedback {
+      margin-top: 14px;
+      border-radius: 16px;
+      padding: 12px 14px;
+      border: 1px solid transparent;
+      font-size: 0.92rem;
+      line-height: 1.55;
+      font-weight: 700;
+    }
+
+    .feedback.success {
+      border-color: rgba(15, 138, 109, 0.14);
+      background: var(--success-soft);
+      color: #16553e;
+    }
+
+    .feedback.error {
+      border-color: rgba(200, 61, 50, 0.14);
+      background: var(--error-soft);
+      color: #81221b;
+    }
+
+    .pill-row {
+      margin-top: 18px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 13px;
+      border-radius: 999px;
+      background: rgba(15, 138, 109, 0.08);
+      color: var(--primary-dark);
+      font-size: 0.88rem;
+      font-weight: 800;
+    }
+
+    .table-wrap {
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.66);
+    }
+
+    table {
+      width: 100%;
+      min-width: 860px;
+      border-collapse: collapse;
+      font-size: 0.94rem;
+    }
+
+    th,
+    td {
+      padding: 14px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+
+    thead th {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      background: rgba(244, 241, 233, 0.92);
+      position: sticky;
+      top: 0;
+    }
+
+    .table-status {
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(15, 138, 109, 0.1);
+      color: var(--primary-dark);
+      font-weight: 800;
+      font-size: 0.84rem;
+    }
+
+    .table-status.expired,
+    .table-status.inactive {
+      background: rgba(200, 61, 50, 0.1);
+      color: #8f2c24;
+    }
+
+    .stack {
+      display: grid;
+      gap: 24px;
+    }
+
+    @media (max-width: 1080px) {
+      .hero,
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .shell {
+        padding-inline: 16px;
+      }
+
+      .hero,
+      .panel-body {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body data-theme="{{ ui_settings.theme }}">
+  <div class="shell">
+    <section class="hero">
+      <div>
+        <div class="eyebrow">Admin Operations</div>
+        <h1>{{ display_app_name }}<br>{{ t("admin_dashboard_title") }}</h1>
+        <p>{{ t("logged_in_as").format(username=admin.username, role=admin.role) }}</p>
+
+        <div class="hero-tools">
+          <a class="tool-button" href="/admin/settings">{{ t("settings") }}</a>
+          <a class="tool-button strong" href="/admin/password">{{ t("change_password") }}</a>
+          <a class="tool-button" href="/admin/logout">{{ t("logout") }}</a>
+        </div>
+
+        <div class="lang-switch">
+          {% for l in supported_languages %}
+            <a class="lang-pill" href="/admin?lang={{ l }}">{{ l.upper() }}</a>
+          {% endfor %}
+        </div>
+
+        <div class="stat-grid">
+          <div class="stat-card">
+            <strong>{{ license_rows|length }}</strong>
+            <span>Verwaltete Lizenzen in der aktuellen Monitoring-Ansicht.</span>
+          </div>
+          <div class="stat-card">
+            <strong>{{ payments|length }}</strong>
+            <span>Zuletzt geladene Zahlungen fuer den Admin-Ueberblick.</span>
+          </div>
+          <div class="stat-card">
+            <strong>{{ admins|length }}</strong>
+            <span>Aktuell geladene Admin- und Support-Benutzer.</span>
+          </div>
+        </div>
+      </div>
+
+      <aside class="hero-side">
+        <div>
+          <p class="side-title">{{ control_center_content.title }}</p>
+          <p class="side-highlight">{{ control_center_content.headline }}</p>
+          <p class="side-copy">{{ control_center_content.description }}</p>
+        </div>
+
+        <div class="pill-row">
+          <span class="pill">Trials</span>
+          <span class="pill">Payments</span>
+          <span class="pill">Licenses</span>
+          <span class="pill">Admins</span>
+        </div>
+      </aside>
+    </section>
+
+    <div class="layout">
+      <div class="card-grid">
+        <section class="panel">
+          <div class="panel-body">
+            <div class="panel-header">
+              <div>
+                <p class="section-kicker">Trials</p>
+                <h3>{{ t("issue_trial_title") }}</h3>
+              </div>
+            </div>
+            <p class="muted">{{ t("issue_trial_hint") }}</p>
+            {% if admin.role == 'superadmin' %}
+              <form class="form-grid" method="post" action="/admin/licenses/trial">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+                <div class="field">
+                  <label for="trial-email">{{ t("email") }}</label>
+                  <input id="trial-email" name="email" type="email" required>
+                </div>
+                <div class="field">
+                  <label for="trial-name">{{ t("name") }} ({{ t("optional") }})</label>
+                  <input id="trial-name" name="full_name" type="text">
+                </div>
+                <div>
+                  <button type="submit" class="btn-primary">{{ t("issue_trial_button") }}</button>
+                </div>
+              </form>
+              {% if trial_feedback.status == 'issued' %}
+                <div class="feedback success">
+                  {{ t("trial_issue_success") }} {{ trial_feedback.email }} | {{ t("license_key") }}: {{ trial_feedback.key }} | {{ t("expires_at") }}: {{ trial_feedback.expires }}
+                </div>
+              {% elif trial_feedback.status == 'activated' %}
+                <div class="feedback success">
+                  {{ t("trial_activate_success") }} {{ trial_feedback.email }} | {{ t("license_key") }}: {{ trial_feedback.key }} | {{ t("expires_at") }}: {{ trial_feedback.expires }}
+                </div>
+              {% elif trial_feedback.status == 'missing_plan' %}
+                <div class="feedback error">{{ t("trial_plan_missing") }}</div>
+              {% elif trial_feedback.status == 'error' %}
+                <div class="feedback error">{{ t("trial_issue_failed") }}</div>
+              {% endif %}
+            {% else %}
+              <span class="readonly">{{ t("read_only") }}</span>
+            {% endif %}
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-body">
+            <div class="panel-header">
+              <div>
+                <p class="section-kicker">Cleanup</p>
+                <h3>{{ t("trial_cleanup_status") }}</h3>
+              </div>
+            </div>
+            {% if latest_cleanup %}
+              <div class="pill-row">
+                <span class="pill">{{ t("last_trial_cleanup") }}: {{ latest_cleanup.created_at }}</span>
+                <span class="pill">{{ t("trial_deleted_count") }}: {{ latest_cleanup.deleted_count }}</span>
+              </div>
+            {% else %}
+              <p class="muted">{{ t("no_data") }}</p>
+            {% endif %}
+          </div>
+        </section>
+      </div>
+
+      <section class="panel stack">
+        <div class="panel-body">
+          <div class="panel-header">
+            <div>
+              <p class="section-kicker">Revenue</p>
+              <h3>{{ t("payments") }}</h3>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>{{ t("order_id") }}</th>
+                  <th>{{ t("plan") }}</th>
+                  <th>{{ t("status") }}</th>
+                  <th>{{ t("amount") }}</th>
+                  <th>{{ t("email_delivery") }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for p in payments %}
+                  <tr>
+                    <td>{{ p.paypal_order_id }}</td>
+                    <td>{{ p.plan_code }}</td>
+                    <td><span class="table-status">{{ p.status }}</span></td>
+                    <td>{{ '%.2f'|format(p.amount) }} {{ p.currency }}</td>
+                    <td>{{ t("yes") if p.email_sent else t("no") }}</td>
+                  </tr>
+                {% else %}
+                  <tr><td colspan="5" class="muted">{{ t("no_data") }}</td></tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel stack">
+        <div class="panel-body">
+          <div class="panel-header">
+            <div>
+              <p class="section-kicker">Monitoring</p>
+              <h3>{{ t("issued_licenses") }} ({{ t("monitoring") }})</h3>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>{{ t("license_key") }}</th>
+                  <th>{{ t("plan") }}</th>
+                  <th>{{ t("customer_name") }}</th>
+                  <th>{{ t("customer_email") }}</th>
+                  <th>{{ t("license_state") }}</th>
+                  <th>{{ t("expires_at") }}</th>
+                  <th>{{ t("remaining_days") }}</th>
+                  <th>{{ t("created_at") }}</th>
+                  <th>{{ t("active") }}</th>
+                  <th>{{ t("action") }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in license_rows %}
+                  <tr>
+                    <td>{{ row.license.key }}</td>
+                    <td>{{ row.license.plan_code }}</td>
+                    <td>{{ row.customer_name if row.customer_name else '-' }}</td>
+                    <td>{{ row.customer_email if row.customer_email else '-' }}</td>
+                    <td>
+                      {% if row.state == 'active' %}
+                        <span class="table-status">{{ t("state_active") }}</span>
+                      {% elif row.state == 'expired' %}
+                        <span class="table-status expired">{{ t("state_expired") }}</span>
+                      {% else %}
+                        <span class="table-status inactive">{{ t("state_inactive") }}</span>
+                      {% endif %}
+                    </td>
+                    <td>{{ row.license.expires_at if row.license.expires_at else t("lifetime") }}</td>
+                    <td>{{ row.remaining_days if row.remaining_days is not none else t("not_applicable") }}</td>
+                    <td>{{ row.license.created_at }}</td>
+                    <td>{{ t("yes") if row.license.is_active else t("no") }}</td>
+                    <td>
+                      {% if admin.role == 'superadmin' %}
+                        <form method="post" action="/admin/licenses/{{ row.license.id }}/toggle">
+                          <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+                          <button class="btn-danger" type="submit">{{ t("toggle") }}</button>
+                        </form>
+                      {% else %}
+                        <span class="readonly">{{ t("read_only") }}</span>
+                      {% endif %}
+                    </td>
+                  </tr>
+                {% else %}
+                  <tr><td colspan="10" class="muted">{{ t("no_data") }}</td></tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel stack">
+        <div class="panel-body">
+          <div class="panel-header">
+            <div>
+              <p class="section-kicker">Access</p>
+              <h3>{{ t("admin_users") }}</h3>
+            </div>
+          </div>
+          <p class="muted">{{ t("admin_users_manage_hint") }}</p>
+
+          <form class="form-grid" method="post" action="/admin/users/create">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+            <div class="field">
+              <label for="new-username">{{ t("username") }}</label>
+              <input id="new-username" name="username" type="text" required>
+            </div>
+            <div class="field">
+              <label for="new-password">{{ t("password") }}</label>
+              <input id="new-password" name="password" type="password" required>
+            </div>
+            <div class="field">
+              <label for="new-role">{{ t("role") }}</label>
+              <select id="new-role" name="role" required>
+                <option value="support">support</option>
+                <option value="superadmin">superadmin</option>
+              </select>
+            </div>
+            <div>
+              <button type="submit" class="btn-primary">{{ t("admin_user_add") }}</button>
+            </div>
+          </form>
+
+          {% if user_feedback.status == 'created' %}
+            <div class="feedback success">{{ t("admin_user_created") }} {{ user_feedback.username }}</div>
+          {% elif user_feedback.status == 'deleted' %}
+            <div class="feedback success">{{ t("admin_user_deleted") }} {{ user_feedback.username }}</div>
+          {% elif user_feedback.status == 'username_exists' %}
+            <div class="feedback error">{{ t("admin_user_exists") }}</div>
+          {% elif user_feedback.status == 'invalid_input' %}
+            <div class="feedback error">{{ t("admin_user_invalid_input") }}</div>
+          {% elif user_feedback.status == 'invalid_role' %}
+            <div class="feedback error">{{ t("admin_user_invalid_role") }}</div>
+          {% elif user_feedback.status == 'new_password_too_short' %}
+            <div class="feedback error">{{ t("new_password_too_short") }}</div>
+          {% elif user_feedback.status == 'new_password_too_weak' %}
+            <div class="feedback error">{{ t("new_password_too_weak") }}</div>
+          {% elif user_feedback.status == 'cannot_delete_self' %}
+            <div class="feedback error">{{ t("admin_user_cannot_delete_self") }}</div>
+          {% elif user_feedback.status == 'last_superadmin' %}
+            <div class="feedback error">{{ t("admin_user_last_superadmin") }}</div>
+          {% elif user_feedback.status == 'user_not_found' %}
+            <div class="feedback error">{{ t("admin_user_not_found") }}</div>
+          {% endif %}
+
+          <div class="table-wrap" style="margin-top: 18px;">
+            <table>
+              <thead>
+                <tr>
+                  <th>{{ t("username") }}</th>
+                  <th>{{ t("role") }}</th>
+                  <th>{{ t("active") }}</th>
+                  <th>{{ t("last_login") }}</th>
+                  <th>{{ t("action") }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for a in admins %}
+                  <tr>
+                    <td>{{ a.username }}</td>
+                    <td>{{ a.role }}</td>
+                    <td>{{ t("yes") if a.is_active else t("no") }}</td>
+                    <td>{{ a.last_login_at }}</td>
+                    <td>
+                      <form method="post" action="/admin/users/{{ a.id }}/delete">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+                        <button class="btn-danger" type="submit">{{ t("delete") }}</button>
+                      </form>
+                    </td>
+                  </tr>
+                {% else %}
+                  <tr><td colspan="5" class="muted">{{ t("no_admins") }}</td></tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</body>
+</html>
